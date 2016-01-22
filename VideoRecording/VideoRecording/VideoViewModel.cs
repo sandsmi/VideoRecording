@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Windows.Input;
@@ -52,7 +53,23 @@ namespace VideoRecording
         public ICommand Browse { get { return new RelayCommand(BrowseExecute);} }
         public void BrowseExecute()
         {
-            
+            // Create OpenFileDialog
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+
+            // Set filter for file extension and default file extension
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+
+            // Display OpenFileDialog by calling ShowDialog method
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox
+            if (result == true)
+            {
+                // Open document
+                string filename = dlg.FileName;
+                FileLocation = filename;
+            }
         }
 
         private void Compression()
