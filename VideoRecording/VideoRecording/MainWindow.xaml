@@ -1,0 +1,31 @@
+﻿<Window x:Class="VideoRecording.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:VideoRecording"
+        Title="Video Downloader" Height="195" Width="525">
+    <Window.DataContext>
+        <local:VideoViewModel />
+    </Window.DataContext>
+    <Grid>
+        <StackPanel Margin="10">
+            <Label FontWeight="Bold">URL pliku</Label>
+            <TextBox Text="{Binding FileUrl}" />
+        </StackPanel>
+        
+        <StackPanel Margin="10, 55, 10, 10">
+            <Label FontWeight="Bold">Zapisz w</Label>
+            <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" >
+                <TextBox Text="{Binding FileLocation}" HorizontalAlignment="Left" Width ="450"/>
+                <Button x:Name="BtnBrowse" Command="{Binding Browse}" Content="..."  Width="35"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0, 120, 110, 10">
+            <CheckBox>Z kompresją</CheckBox>
+        </WrapPanel>
+        
+        <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="120, 115, 0, 10">
+            <Button x:Name="BtnDownloadFile" Command="{Binding DownloadFile}" Content="Start"  Height="25" Width="97"/>
+        </WrapPanel>
+    </Grid>
+</Window>
