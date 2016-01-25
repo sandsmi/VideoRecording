@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
+using System.Windows;
 using System.Windows.Input;
 
 namespace VideoRecording
@@ -48,14 +49,14 @@ namespace VideoRecording
             return true;
         }
 
-        public ICommand DownloadFile { get { return new RelayCommand(DownloadFileExecute, CanDownloadFile);  } }
-        private void DownloadFileExecute()
-        {
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(FileUrl, FileLocation);
-            }
-        }
+        //public ICommand DownloadFile { get { return new RelayCommand(DownloadFileExecute, CanDownloadFile);  } }
+        //private void DownloadFileExecute()
+        //{
+        //    using (WebClient client = new WebClient())
+        //    {
+        //        client.DownloadFile(FileUrl, FileLocation);
+        //    }
+        //}
 
         public ICommand Browse { get { return new RelayCommand(BrowseExecute);} }
         public void BrowseExecute()
@@ -79,12 +80,12 @@ namespace VideoRecording
         public ICommand CaptureStart { get { return new RelayCommand(CaptureStartExecute, CanDownloadFile); } }
         private void CaptureStartExecute()
         {
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-            process.StartInfo.FileName = @"d:\VideoRecording\VideoRecording\ffmpeg.exe";
+            process.StartInfo.FileName = @"ffmpeg\ffmpeg.exe";
 
-            var compressedArg = String.Format("-i {0} -vcodec copy -an {1}", FileUrl, FileLocation);
-            var uncompressedArg = String.Format("-i {0} -t 00:00:30 -c:v libx264 {1}", FileUrl, FileLocation);
+            var compressedArg = String.Format(" -i {0} -vcodec copy -an {1}", FileUrl, FileLocation);
+            var uncompressedArg = String.Format(" -i {0} -t 00:00:30 -c:v libx264 {1}", FileUrl, FileLocation);
 
             if (IsCompressed)
                 process.StartInfo.Arguments = compressedArg;
@@ -100,7 +101,8 @@ namespace VideoRecording
 
         private void CaptureStopExecute()
         {
-            process.Kill();
+            if (!process.HasExited)
+                process.Kill();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
