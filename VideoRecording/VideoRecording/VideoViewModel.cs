@@ -41,8 +41,15 @@ namespace VideoRecording
             }
         }
 
-        public ICommand DownloadFile { get { return new RelayCommand(DownloadFileExecute);  } }
-        public void DownloadFileExecute()
+        private bool CanDownloadFile()
+        {
+            if (FileUrl == null || FileLocation == null)
+                return false;
+            return true;
+        }
+
+        public ICommand DownloadFile { get { return new RelayCommand(DownloadFileExecute, CanDownloadFile);  } }
+        private void DownloadFileExecute()
         {
             using (WebClient client = new WebClient())
             {
@@ -53,31 +60,47 @@ namespace VideoRecording
         public ICommand Browse { get { return new RelayCommand(BrowseExecute);} }
         public void BrowseExecute()
         {
-            // Create OpenFileDialog
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
-            // Set filter for file extension and default file extension
-            dlg.DefaultExt = ".txt";
-            dlg.Filter = "Text documents (.txt)|*.txt";
+            dlg.DefaultExt = ".mp4";
+            dlg.Filter = "Videos (.mp4)|*.mp4";
 
-            // Display OpenFileDialog by calling ShowDialog method
             Nullable<bool> result = dlg.ShowDialog();
 
-            // Get the selected file name and display in a TextBox
             if (result == true)
             {
-                // Open document
                 string filename = dlg.FileName;
                 FileLocation = filename;
             }
         }
 
-        private void Compression()
+        Process process = new Process();
+
+        public ICommand CaptureStart { get { return new RelayCommand(CaptureStartExecute, CanDownloadFile); } }
+        private void CaptureStartExecute()
         {
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+            process.StartInfo.FileName = @"d:\VideoRecording\VideoRecording\ffmpeg.exe";
+
+            var compressedArg = String.Format("-i {0} -vcodec copy -an {1}", FileUrl, FileLocation);
+            var uncompressedArg = String.Format("-i {0} -t 00:00:30 -c:v libx264 {1}", FileUrl, FileLocation);
+
             if (IsCompressed)
-                Process.Start("cmd", "ffmpeg -i 'rtsp://root:pass@172.16.1.200/profile2'  -vcodec copy -an test.mp4");
+                process.StartInfo.Arguments = compressedArg;
+            //"ffmpeg -i 'rtsp://root:pass@172.16.1.200/profile2'  -vcodec copy -an test.mp4";
             else
-                Process.Start("cmd", "ffmpeg -i 'rtsp://root:pass@172.16.1.200/profile2' -t 00:00:30 -c:v libx264 test.mp4");
+                process.StartInfo.Arguments = uncompressedArg;
+            //"ffmpeg -i 'rtsp://root:pass@172.16.1.200/profile2' -t 00:00:30 -c:v libx264 test.mp4";
+
+            process.Start();
+        }
+
+        public ICommand CaptureStop { get { return new RelayCommand(CaptureStopExecute, CanDownloadFile); } }
+
+        private void CaptureStopExecute()
+        {
+            process.Kill();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

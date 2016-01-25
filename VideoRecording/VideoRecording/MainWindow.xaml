@@ -3,10 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:VideoRecording"
         Title="Video Downloader" Height="195" Width="525">
+    
     <Window.DataContext>
         <local:VideoViewModel />
     </Window.DataContext>
+    
+    <Window.Resources>
+        <Style TargetType="{x:Type ToggleButton}"
+           x:Key="BtnDownloadFile">
+            <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Content" Value="Stop" />
+                    <Setter Property="Command" Value="{Binding CaptureStop}" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Content" Value="Start" />
+                    <Setter Property="Command" Value="{Binding CaptureStart}" />
+                </Trigger>
+            </Style.Triggers>
+            </Style>
+    </Window.Resources>
+    
     <Grid>
+        
         <StackPanel Margin="10">
             <Label FontWeight="Bold">URL pliku</Label>
             <TextBox Text="{Binding FileUrl}" />
@@ -21,11 +40,15 @@
         </StackPanel>
 
         <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0, 120, 110, 10">
-            <CheckBox>Z kompresją</CheckBox>
+            <CheckBox Content="Z kompresją" IsChecked="{Binding IsCompressed}"></CheckBox>
         </WrapPanel>
         
         <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="120, 115, 0, 10">
-            <Button x:Name="BtnDownloadFile" Command="{Binding DownloadFile}" Content="Start"  Height="25" Width="97"/>
+            <Button x:Name="BtnDownloadFile" Command="{Binding CaptureStart}" Content="Start"  Height="25" Width="97"/>
+            <Button x:Name="BtnStopFile" Command="{Binding CaptureStop}" Content="Stop"  Height="25" Width="97"/>
+
+            <!--<ToggleButton Height="25" Width="97" Style="{StaticResource BtnDownloadFile}">
+            </ToggleButton>-->
         </WrapPanel>
     </Grid>
 </Window>
