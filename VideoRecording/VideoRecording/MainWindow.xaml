@@ -14,11 +14,11 @@
             <Style.Triggers>
                     <Trigger Property="IsChecked" Value="True">
                     <Setter Property="Content" Value="Stop" />
-                    <Setter Property="Command" Value="{Binding CaptureStop}" />
+                    <Setter Property="Command" Value="{Binding CaptureStart}" />
                 </Trigger>
                 <Trigger Property="IsChecked" Value="False">
                     <Setter Property="Content" Value="Start" />
-                    <Setter Property="Command" Value="{Binding CaptureStart}" />
+                    <Setter Property="Command" Value="{Binding CaptureStop}" />
                 </Trigger>
             </Style.Triggers>
             </Style>
@@ -44,11 +44,11 @@
         </WrapPanel>
         
         <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="120, 115, 0, 10">
-            <Button x:Name="BtnDownloadFile" Command="{Binding CaptureStart}" Content="Start"  Height="25" Width="97"/>
-            <Button x:Name="BtnStopFile" Command="{Binding CaptureStop}" Content="Stop"  Height="25" Width="97"/>
+            <!--<Button x:Name="BtnDownloadFile" Command="{Binding CaptureStart}" Content="Start"  Height="25" Width="97"/>
+            <Button x:Name="BtnStopFile" Command="{Binding CaptureStop}" Content="Stop"  Height="25" Width="97"/>-->
 
-            <!--<ToggleButton Height="25" Width="97" Style="{StaticResource BtnDownloadFile}">
-            </ToggleButton>-->
+            <ToggleButton Height="25" Width="97" Style="{StaticResource BtnDownloadFile}">
+            </ToggleButton>
         </WrapPanel>
     </Grid>
 </Window>

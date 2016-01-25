@@ -80,7 +80,7 @@ namespace VideoRecording
         public ICommand CaptureStart { get { return new RelayCommand(CaptureStartExecute, CanDownloadFile); } }
         private void CaptureStartExecute()
         {
-            //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             process.StartInfo.FileName = @"ffmpeg\ffmpeg.exe";
 
